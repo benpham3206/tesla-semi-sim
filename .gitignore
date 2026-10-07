@@ -1,0 +1,47 @@
+# Secrets and local environment
+.env
+.env.*
+*.env
+!.env.example
+!example.env
+!*.env.example
+!*.example.env
+*.pem
+*.key
+*.p12
+*.pfx
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generic caches/build outputs
+.cache/
+tmp/
+temp/
+build/
+dist/
+out/
+coverage/
+
+# Common language caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+target/
+.gradle/
+
+# Runtime artifacts: keep directory skeleton only
+/artifacts/logs/*
+!/artifacts/logs/.gitkeep
+/artifacts/traces/*
+!/artifacts/traces/.gitkeep
+/artifacts/reports/*
+!/artifacts/reports/.gitkeep
+/artifacts/benchmarks/*
+!/artifacts/benchmarks/.gitkeep
