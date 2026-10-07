@@ -10,12 +10,13 @@ Open `index.html` directly, or run `python3 -m http.server` and browse to `http:
 
 | Input | Action |
 | --- | --- |
-| Touch | Steer with the left thumb; accelerate and brake with the right thumb. |
+| Touch | Steer with the left pad; press BRAKE and GO with the right thumb; tap D/R to change gear, CAM for camera, SND for sound. |
 | Left/right arrows or A/D | Steer. |
 | Up arrow or W | Accelerate. |
 | Down arrow or S | Brake. |
 | R | Toggle between drive and reverse. |
 | C | Cycle camera, including the rear docking view. |
+| M | Toggle sound. |
 
 ## Verify
 

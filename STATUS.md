@@ -20,5 +20,6 @@ Tune steering and brake feel on a physical phone.
 
 | Acceptance criterion | Evidence | Result |
 | --- | --- | --- |
-| Repository contract | `scripts/verify-repo.sh` | Not run |
-| Simulation behavior | `node tests/sim.test.js` | Not run |
+| Repository contract | `scripts/verify-repo.sh` | Pass |
+| Simulation behavior | `node tests/sim.test.js` | Pass: 0–60 mph 21.1 s, 1.70 kWh/mi, route drivable with 0 collisions |
+| Mobile layout | Headless Chrome at 844×390 and 390×844 | Pass |
