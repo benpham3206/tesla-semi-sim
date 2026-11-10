@@ -1,10 +1,12 @@
 # Tesla Semi Sim
 
-Tesla Semi Sim is a phone-playable browser delivery simulation where you couple a trailer, drive a short route, manage speed and battery, and reverse into a loading dock.
+Tesla Semi Sim is a landscape 3D phone game, played in the browser, where you couple a trailer, drive a short route, manage speed and battery, and reverse into a loading dock.
 
 ## Run
 
 Open `index.html` directly, or run `python3 -m http.server` and browse to `http://localhost:8000`.
+
+On a phone, hold it in landscape. Use Share → Add to Home Screen to launch it fullscreen with its own icon.
 
 ## Controls
 
@@ -15,7 +17,7 @@ Open `index.html` directly, or run `python3 -m http.server` and browse to `http:
 | Up arrow or W | Accelerate. |
 | Down arrow or S | Brake. |
 | R | Toggle between drive and reverse. |
-| C | Cycle camera, including the rear docking view. |
+| C | Cycle the Chase, Cab and Top cameras. Reverse always uses the top-down docking view. |
 | M | Toggle sound. |
 
 ## Verify

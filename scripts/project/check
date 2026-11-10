@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 node --check sim.js
+# Inline game script in index.html: syntax only, the 3D view itself needs a browser.
+sed -n '/^<script>$/,/^<\/script>$/p' index.html | sed '1d;$d' | node --check -
