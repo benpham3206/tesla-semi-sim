@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p dist/vendor
+cp index.html sim.js manifest.webmanifest icon.png dist/
+cp vendor/three.min.js dist/vendor/

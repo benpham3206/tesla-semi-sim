@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0d10">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -78,6 +78,59 @@
   #rotate { display: none; background: #0b0d10; text-align: center; }
   @media (orientation: portrait) { #rotate { display: flex; } }
   @media (display-mode: standalone), (display-mode: fullscreen) { .tip { display: none; } }
+
+  #cockpit { position: absolute; inset: 0; display: none; pointer-events: none;
+    --gut: calc(max(12px, env(safe-area-inset-bottom)) + clamp(92px, 18vh, 168px));
+    --wheelS: clamp(170px, 44vh, 340px); }
+  body[data-view="cab"] #cockpit { display: block; }
+  #cockpit .roof { position: absolute; inset-inline: 0; top: 0; height: clamp(4px, 1.4vh, 10px); background: oklch(0.15 0.01 260); }
+  #cockpit .pillar { position: absolute; top: 0; bottom: 0; width: clamp(16px, 3.2vw, 38px); background: oklch(0.15 0.01 260); }
+  #cockpit .pillar.left { left: 0; clip-path: polygon(0 0, 100% 0, 55% 100%, 0 100%); border-inline-end: 1px solid rgba(255, 255, 255, .06); }
+  #cockpit .pillar.right { right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 45% 100%); border-inline-start: 1px solid rgba(255, 255, 255, .06); }
+  #cockpit .dash { position: absolute; left: -15%; right: -15%; bottom: -25%; height: 52%; border-radius: 50% 50% 0 0;
+    background: radial-gradient(120% 150% at 50% 0%, oklch(0.30 0.02 255), oklch(0.20 0.015 260) 55%, oklch(0.15 0.01 260));
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, .05), 0 -10px 40px rgba(0, 0, 0, .35); }
+  #cockpit .column { position: absolute; left: 50%; bottom: 0; width: calc(var(--wheelS) * .42); height: calc(var(--wheelS) * .2);
+    margin-left: calc(var(--wheelS) * -.21); border-radius: 24px 24px 0 0; background: linear-gradient(oklch(0.22 0.015 260), oklch(0.14 0.01 260)); }
+  #cabWheel { position: absolute; left: 50%; bottom: calc(var(--wheelS) * -.36); width: var(--wheelS); aspect-ratio: 1;
+    margin-left: calc(var(--wheelS) / -2); filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .45)); will-change: transform; }
+  #cabWheel svg { display: block; width: 100%; height: 100%; }
+  .screens { position: absolute; inset-inline: 0; bottom: var(--gut); display: flex; justify-content: center; gap: calc(var(--wheelS) + 24px); }
+  .cab-screen { width: clamp(176px, 26vw, 360px); height: clamp(92px, 22vh, 210px); padding: 10px 12px; border-radius: 12px; position: relative;
+    background: linear-gradient(180deg, oklch(0.20 0.015 260), oklch(0.14 0.01 260)); border: 1px solid rgba(255, 255, 255, .09);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .05); }
+  .cab-screen::after { content: ""; position: absolute; left: 30%; right: 30%; top: 100%; height: clamp(8px, 2vh, 16px);
+    background: oklch(0.13 0.01 260); border-radius: 0 0 6px 6px; }
+  #cluster { transform: perspective(900px) rotateY(7deg); transform-origin: right center; }
+  #navScreen { transform: perspective(900px) rotateY(-7deg); transform-origin: left center; display: flex; flex-direction: column; }
+  .cs-speed { display: flex; align-items: baseline; gap: 8px; }
+  .cs-speed b { font-size: clamp(26px, 7.5vh, 46px); line-height: 1; font-variant-numeric: tabular-nums; }
+  .cs-speed span { color: var(--dim); font-size: clamp(10px, 1.8vh, 13px); text-transform: uppercase; letter-spacing: .05em; }
+  .cs-speed em { margin-inline-start: auto; font-style: normal; font-weight: 800; font-size: clamp(15px, 3.2vh, 24px); }
+  .cs-speed em.r { color: var(--red); }
+  .cs-row { display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: clamp(11px, 2.4vh, 16px); font-variant-numeric: tabular-nums; }
+  .cs-row small { color: var(--dim); font-size: .8em; text-transform: uppercase; letter-spacing: .04em; }
+  .cs-row .battery { width: 32px; height: 12px; }
+  .cs-row .push { margin-inline-start: auto; }
+  #map { flex: 1; min-height: 0; width: 100%; }
+  #mapRoad { stroke: oklch(0.62 0.03 250); }
+  #mapGate { fill: oklch(0.72 0.12 200); }
+  #mapDock { fill: var(--ok); }
+  #mapGoal { fill: none; stroke: var(--ok); stroke-width: 2; }
+  #mapTruck { fill: var(--ink); stroke: #0b0d10; stroke-width: .8; }
+  #mapInfo { color: var(--dim); font-size: clamp(10px, 2vh, 13px); text-align: center; white-space: nowrap; overflow: hidden; }
+
+  body[data-view="cab"] :is(.speed, .stats) { display: none; }
+  body[data-view="cab"] .steer { height: 72px; width: min(32vw, 300px); }
+  body[data-view="cab"] .knob { top: 2px; }
+  body[data-view="cab"] :is(.pedal, #accel) { width: 60px; height: clamp(84px, 12vh, 120px); }
+  body[data-view="cab"] #gear { width: 52px; height: 52px; font-size: 16px; }
+
+  button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
+  button:active { transform: scale(.94); }
+  @media (hover: hover) and (pointer: fine) { .tools button:hover, #gear:hover { background: #2a3038; } }
+  @media (prefers-reduced-motion: reduce) { .toast, #arrow { transition: none; } }
+
   @media (max-height: 420px) and (orientation: landscape) {
     .pedal { height: 104px; } #accel { height: 124px; } .steer { height: 84px; } .knob { top: 10px; }
     .speed b { font-size: 24px; }
@@ -86,6 +139,42 @@
 </head>
 <body>
 <canvas id="c"></canvas>
+
+<div id="cockpit">
+  <div class="roof" aria-hidden="true"></div>
+  <div class="pillar left" aria-hidden="true"></div>
+  <div class="pillar right" aria-hidden="true"></div>
+  <div class="dash" aria-hidden="true"></div>
+  <div class="column" aria-hidden="true"></div>
+  <div id="cabWheel" aria-hidden="true"><svg viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="43" fill="none" stroke="oklch(0.26 0.02 255)" stroke-width="9"/>
+    <circle cx="50" cy="50" r="43" fill="none" stroke="oklch(0.36 0.02 255)" stroke-width="1.2" transform="translate(-.6 -.8)"/>
+    <rect x="8" y="46" width="36" height="8" rx="4" fill="oklch(0.24 0.02 255)"/>
+    <rect x="56" y="46" width="36" height="8" rx="4" fill="oklch(0.24 0.02 255)"/>
+    <rect x="46" y="54" width="8" height="38" rx="4" fill="oklch(0.24 0.02 255)"/>
+    <circle cx="50" cy="50" r="17" fill="oklch(0.20 0.015 260)"/>
+    <ellipse cx="50" cy="44" rx="12" ry="6" fill="oklch(0.30 0.02 255)" opacity=".5"/>
+    <text x="50" y="52.5" text-anchor="middle" font-size="6.5" letter-spacing="1.5" fill="oklch(0.62 0.02 255)" font-family="inherit">TESLA</text>
+  </svg></div>
+  <div class="screens">
+    <div class="cab-screen" id="cluster" role="group" aria-label="Driving instruments">
+      <div class="cs-speed"><b id="cspd">0</b><span>mph</span><em id="cgear">D</em></div>
+      <div class="cs-row"><span class="battery"><i id="cbatt"></i></span><b id="cbattPct">100%</b><b class="push" id="cpwr">0 kW</b></div>
+      <div class="cs-row"><small>Avg</small><b id="ceff">–</b><small class="push">Cargo</small><b id="ccargo">–</b></div>
+    </div>
+    <div class="cab-screen" id="navScreen" role="group" aria-label="Route map">
+      <svg id="map" viewBox="0 0 240 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Route overview">
+        <polyline id="mapRoad" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <g id="mapBays"></g>
+        <circle id="mapGate" r="3"/>
+        <circle id="mapDock" r="3.5"/>
+        <circle id="mapGoal" r="5"/>
+        <path id="mapTruck" d="M7 0 L-5 4.5 L-2.5 0 L-5 -4.5 Z"/>
+      </svg>
+      <div id="mapInfo"></div>
+    </div>
+  </div>
+</div>
 
 <div class="hud">
   <div class="card speed"><b id="spd">0</b><small>mph</small><span class="gear" id="gearLabel">D</span></div>
@@ -148,26 +237,53 @@ const wrap = a => Math.atan2(Math.sin(a), Math.cos(a));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 // ---------- State ----------
-let load = 'full', s = null, prev = null, running = false, camMode = 0, waypoint = 0, goal = [0, 0];
+let load = 'full', s = null, prev = null, running = false, camMode = 1, waypoint = 0, goal = [0, 0];
 const CAMS = ['Chase', 'Cab', 'Top'];
 const portrait = matchMedia('(orientation: portrait)');
 const best = k => { try { return +localStorage['semi-best-' + k] || 0; } catch { return 0; } };
 const route = WORLD.roads[0].pts.slice(1).concat([WORLD.gate, [WORLD.dock.x, WORLD.dock.y + 25]]);
 const snap = st => ({ x: st.x, y: st.y, th: st.th, psi: st.psi, kx: st.kx, ky: st.ky, kpsi: st.kpsi, coupled: st.coupled });
 
+const mapToSvg = (() => {
+  const pad = 10, pts = [...WORLD.roads[0].pts, WORLD.gate, [WORLD.dock.x, WORLD.dock.y]];
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const k = Math.min((240 - 2 * pad) / (x1 - x0), (120 - 2 * pad) / (y1 - y0));
+  const ox = pad + (240 - 2 * pad - (x1 - x0) * k) / 2, oy = pad + (120 - 2 * pad - (y1 - y0) * k) / 2;
+  return p => [ox + (p[0] - x0) * k, 120 - oy - (p[1] - y0) * k];
+})();
+{
+  const at = (el, p) => { const [x, y] = mapToSvg(p); el.setAttribute('cx', x); el.setAttribute('cy', y); };
+  $('mapRoad').setAttribute('points', WORLD.roads[0].pts.map(p => mapToSvg(p).map(n => n.toFixed(1)).join(',')).join(' '));
+  at($('mapGate'), WORLD.gate); at($('mapDock'), [WORLD.dock.x, WORLD.dock.y]);
+  $('mapBays').innerHTML = WORLD.bays.map(x => {
+    const [bx, by] = mapToSvg([x, WORLD.dock.y]);
+    return `<rect x="${(bx - 4).toFixed(1)}" y="${(by - 3).toFixed(1)}" width="8" height="6" rx="1.5" fill="${x === WORLD.dock.x ? 'var(--ok)' : 'oklch(0.45 0.02 260)'}"/>`;
+  }).join('');
+}
+
 // ---------- Input ----------
 const input = { steer: 0, throttle: 0, brake: 0 };
 const touch = { steer: null, throttle: 0, brake: 0 };
 const keys = new Set();
 
+const releases = [];
 function bindPad(el, onMove, onEnd) {
   let id = null;
-  el.addEventListener('pointerdown', e => { id = e.pointerId; el.setPointerCapture(id); onMove(e); e.preventDefault(); audio.unlock(); });
+  const release = () => { if (id !== null) { try { el.releasePointerCapture(id); } catch {} id = null; onEnd(); } };
+  el.addEventListener('pointerdown', e => { if (id !== null) return; id = e.pointerId; el.setPointerCapture(id); onMove(e); e.preventDefault(); audio.unlock(); });
   el.addEventListener('pointermove', e => { if (e.pointerId === id) onMove(e); });
-  const end = e => { if (e.pointerId === id) { id = null; onEnd(); } };
+  const end = e => { if (e.pointerId === id) release(); };
   el.addEventListener('pointerup', end);
   el.addEventListener('pointercancel', end);
   el.addEventListener('lostpointercapture', end);
+  releases.push(release);
+}
+function resetInput() {
+  for (const release of releases) release();
+  keys.clear();
+  touch.steer = null; touch.throttle = touch.brake = 0;
+  input.steer = input.throttle = input.brake = 0; keySteer = 0;
 }
 bindPad($('steer'), e => {
   const r = $('steer').getBoundingClientRect();
@@ -180,13 +296,14 @@ for (const name of ['accel', 'brake']) {
     touch[key] = clamp(0.35 + 0.65 * (1 - (e.clientY - r.top) / r.height), 0.35, 1);
   }, () => { touch[key] = 0; });
 }
-$('gear').addEventListener('pointerdown', e => { e.preventDefault(); audio.unlock(); toggleGear(); });
-$('cam').addEventListener('pointerdown', e => { e.preventDefault(); cycleCam(); });
-$('snd').addEventListener('pointerdown', e => { e.preventDefault(); audio.toggle(); });
+$('gear').addEventListener('click', () => { audio.unlock(); toggleGear(); });
+$('cam').addEventListener('click', cycleCam);
+$('snd').addEventListener('click', () => audio.toggle());
 document.addEventListener('contextmenu', e => e.preventDefault());
 
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
+  if (e.target instanceof HTMLButtonElement && (k === ' ' || k === 'enter')) return;
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
   if (e.repeat) return;
   audio.unlock();
@@ -197,7 +314,8 @@ addEventListener('keydown', e => {
   else keys.add(k);
 });
 addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
-addEventListener('blur', () => keys.clear());
+addEventListener('blur', resetInput);
+portrait.addEventListener('change', resetInput);
 
 let keySteer = 0;
 function readInput(dt) {
@@ -415,6 +533,9 @@ function render(v, dt) {
   lamp.emissiveIntensity = input.brake > 0 ? 3 : 0.4;
 
   const view = !running ? 'Orbit' : s.gear < 0 ? 'Top' : CAMS[camMode], cut = view !== lastView;
+  if (cut) { document.body.dataset.view = view.toLowerCase(); $('cam').textContent = view === 'Top' && s.gear < 0 ? 'TOP' : CAMS[camMode].toUpperCase(); }
+  tractor.visible = view !== 'Cab';
+  $('cabWheel').style.transform = `rotate(${(s.delta / P.maxSteer * 150).toFixed(1)}deg)`;
   const fx = Math.cos(v.th), fy = Math.sin(v.th), e = elev(v.x, v.y);
   lastView = view;
   if (view === 'Top') {   // looks straight down with the direction of travel up the screen
@@ -442,6 +563,7 @@ function render(v, dt) {
 
 // ---------- HUD ----------
 const fmtTime = t => `${t / 60 | 0}:${String(t % 60 | 0).padStart(2, '0')}`;
+const PHASE_LABEL = { couple: 'Couple trailer', deliver: 'Delivery yard', dock: 'Loading bay', done: 'Delivered' };
 function objective() {
   if (s.phase === 'couple') return [[s.kx, s.ky], s.gear > 0 ? 'Shift to R and back slowly under the trailer' : 'Back slowly under the trailer kingpin'];
   if (s.phase === 'deliver') {
@@ -467,6 +589,19 @@ function hud() {
   const dist = Math.hypot(tx - s.x, ty - s.y);
   $('obj').textContent = `${text}${s.phase === 'deliver' ? ` · ${(dist / 1609.344 * 5280 | 0).toLocaleString()} ft` : ''} · ${fmtTime(s.time)}`;
   $('arrow').style.transform = `rotate(${Math.atan2(ty - s.y, tx - s.x) - upAng}rad)`;
+  $('cspd').textContent = Math.round(Math.abs(s.v) / MPH);
+  $('cbattPct').textContent = pct.toFixed(1) + '%';
+  $('cbatt').style.width = `calc(${pct}% - 2px)`;
+  $('cpwr').textContent = $('pwr').textContent;
+  $('cpwr').style.color = kw < 0 ? 'var(--ok)' : '';
+  $('ceff').textContent = $('eff').textContent;
+  $('ccargo').textContent = $('cargo').textContent;
+  $('cgear').textContent = s.gear < 0 ? 'R' : 'D';
+  $('cgear').classList.toggle('r', s.gear < 0);
+  const [mx, my] = mapToSvg([s.x, s.y]), [gx, gy] = mapToSvg(goal);
+  $('mapTruck').setAttribute('transform', `translate(${mx.toFixed(1)} ${my.toFixed(1)}) rotate(${(-s.th * 180 / Math.PI).toFixed(1)})`);
+  $('mapGoal').setAttribute('cx', gx); $('mapGoal').setAttribute('cy', gy);
+  $('mapInfo').textContent = `${PHASE_LABEL[s.phase] || ''} · ${dist >= 1609.344 ? (dist / 1609.344).toFixed(1) + ' mi' : Math.round(dist) + ' m'}`;
 }
 
 function handleEvents() {
@@ -507,7 +642,7 @@ function drawLoads() {
 }
 drawLoads();
 function startOrRestart() {
-  s = Sim.createState(load); prev = snap(s); waypoint = 0; camMode = 0;
+  s = Sim.createState(load); prev = snap(s); waypoint = 0; camMode = 1; resetInput();
   $('gear').textContent = $('gearLabel').textContent = 'D'; $('gear').classList.remove('r'); $('gearLabel').classList.remove('r');
   if (matchMedia('(pointer: coarse)').matches) document.documentElement.requestFullscreen?.()?.then(() => screen.orientation.lock?.('landscape')).catch(() => {});
   $('start').hidden = $('end').hidden = true; running = true; document.body.classList.add('playing'); audio.unlock();
@@ -531,7 +666,7 @@ function frame(now) {
   audio.update(now);
   requestAnimationFrame(frame);
 }
-document.addEventListener('visibilitychange', () => { last = performance.now(); acc = 0; });
+document.addEventListener('visibilitychange', () => { last = performance.now(); acc = 0; if (document.hidden) resetInput(); });
 resize();
 s = Sim.createState(load); prev = snap(s);
 requestAnimationFrame(frame);

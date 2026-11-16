@@ -187,6 +187,8 @@ The stable entry points are `scripts/verify-repo.sh` (repository contract) and `
 
 `scripts/verify-repo.sh` checks the repository contract. The other hooks are project-specific and may be unconfigured. Run the checks that provide relevant evidence. Do not claim verification that did not run.
 
+After cockpit or input changes, run `node tests/cockpit.test.js`. It needs Node 22 and Chrome; see `README.md` for setup, screenshot output, and device-test limits.
+
 For expensive or release-level evaluation:
 
 ```bash

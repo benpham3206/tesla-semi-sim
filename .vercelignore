@@ -1,0 +1,11 @@
+*
+!index.html
+!sim.js
+!icon.png
+!manifest.webmanifest
+!vercel.json
+!vendor
+!vendor/three.min.js
+!scripts
+!scripts/project
+!scripts/project/build
