@@ -2,6 +2,8 @@
 
 Tesla Semi Sim is a landscape 3D phone game, played in the browser, where you couple a trailer, drive a short route, manage speed and battery, and reverse into a loading dock.
 
+**Play:** https://tesla-semi-sim.vercel.app
+
 ## Run
 
 Open `index.html` directly, or run `python3 -m http.server` and browse to `http://localhost:8000`.

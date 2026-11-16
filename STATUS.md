@@ -27,8 +27,9 @@ Ben will test this build on his iPhone and iPad. Check steering and pedal feel, 
 - One reset path releases controls on blur, backgrounding, rotation, and restart.
 - Independent review found blocked driving keys after button focus and second-finger control takeover. Both received small fixes and browser regression checks.
 - `tests/cockpit.test.js` uses Node 22 WebSocket and installed Chrome. It checks offline loading, camera modes, driving, multi-touch ownership, screen/control separation, and portrait pause/input release.
-- Ben requested a Vercel deployment linked to this GitHub repository. Publication is in progress on the feature branch; do not merge `main` without approval.
-- Vercel account and project were confirmed with CLI 65.12.1: `benpham3206s-projects/tesla-semi-sim`. The existing public URL is `https://tesla-semi-sim.vercel.app`; it still serves the older build until deployment completes.
+- Public build: https://tesla-semi-sim.vercel.app. It serves the cockpit version without a login.
+- GitHub: [PR #3](https://github.com/benpham3206/tesla-semi-sim/pull/3) is open on `feat/cockpit-pov`. The deployed game source is commit `3a12299`. `main` remains at `bd9f1f0`; nothing was merged.
+- Vercel project `benpham3206s-projects/tesla-semi-sim` is connected to this GitHub repository. CLI 65.12.1 reported production deployment `dpl_2FQcshTtmAg3nhhhVSs5qkaC7evh` as READY and assigned the public alias. GitHub's Vercel and CI checks passed.
 - `vercel.json` uses the existing build-hook pattern to copy only game assets into `dist/`.
 - Ponytail review combined duplicate Cab pedal sizing. Generated Graphify research output was moved to recoverable Trash, not included in the deliverable.
 
@@ -53,12 +54,14 @@ Ben will test this build on his iPhone and iPad. Check steering and pedal feel, 
 | Visual review | Actual 844×390 and 1180×820 screenshots after the second pass | Reviewed by lead; no real-device claim |
 | Focused-button driving keys and same-pad finger ownership | Added browser regressions | Pass |
 | Real iPhone, iPad and Samsung S24 | Owner test | Not yet checked |
+| Hosted driving and touch behavior | `node tests/cockpit.test.js https://tesla-semi-sim.vercel.app` | Pass |
+| Public assets and publication boundary | Unauthenticated HTTPS reads, SHA-256 comparisons, and denied-path checks | All five game assets match local files; root returns 200; docs, tests, repository metadata, build script and Vercel config return 404 |
+| Deployment package | `make build` and Vercel CLI dry run | Five public assets; seven required upload files; no dependency install |
 
 ## Test handoff
 
-- Final checks: `node tests/cockpit.test.js`, `make check test`, and `git diff --check` passed.
-- Final browser screenshots: `/var/folders/nh/b2jx7mgs5139ff0r11688h680000gn/T/semi-cockpit-FTqLqH/`. The lead viewed the final 844×390 and 667×375 images.
-- Phone/tablet test URL for this session: `http://10.0.0.166:8766`. Use the same Wi-Fi as the Mac. Keep the Mac awake. Use landscape and tap Start shift.
-- The phone server serves only game assets. HTTP checks confirmed the served files match the current local files. Project instructions, tests, and `.git/config` return 404.
-- The Mac preview uses loopback port 8765. Both local servers remain available until the public deployment is verified.
+- Final checks: `make check test build`, local and hosted `tests/cockpit.test.js`, and `git diff --check` passed.
+- A reviewed cockpit screenshot is retained at `tests/cockpit-844.png` and shown in PR #3. Hosted-check screenshots are in `/var/folders/nh/b2jx7mgs5139ff0r11688h680000gn/T/semi-cockpit-L4gQIW/`.
+- Open https://tesla-semi-sim.vercel.app on the test device. Use landscape and tap Start shift. The Mac does not need to remain on.
+- The old loopback preview and temporary Wi-Fi server were stopped after the hosted build passed. Do not use the old local test links.
 - Source changes, browser checks, screenshots, and reference images are retained. Temporary browser profiles were created and removed by the test. No pre-existing file was removed.
