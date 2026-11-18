@@ -27,7 +27,7 @@ Play in landscape on an iPhone or iPad, then on a Galaxy S24. Listen under load 
 - One reset path releases controls on blur, backgrounding, rotation, and restart.
 - Independent review found blocked driving keys after button focus and second-finger control takeover. Both received small fixes and browser regression checks.
 - `tests/cockpit.test.js` uses Node 22 WebSocket and installed Chrome. It checks offline loading, camera modes, driving, multi-touch ownership, screen/control separation, and portrait pause/input release.
-- Public build: https://tesla-semi-sim.vercel.app. It serves the cockpit version without a login.
+- Public build: https://tesla-semi-sim.vercel.app. It serves the original cockpit without a login.
 - [PR #3](https://github.com/benpham3206/tesla-semi-sim/pull/3) merged the original cockpit. The sound update is on a separate branch.
 - Vercel project `benpham3206s-projects/tesla-semi-sim` is connected to this GitHub repository. CLI 65.12.1 reported production deployment `dpl_2FQcshTtmAg3nhhhVSs5qkaC7evh` as READY and assigned the public alias. GitHub's Vercel and CI checks passed.
 - `vercel.json` uses the existing build-hook pattern to copy only game assets into `dist/`.
@@ -65,6 +65,6 @@ Play in landscape on an iPhone or iPad, then on a Galaxy S24. Listen under load 
 
 - Local checks: `make verify check test build`, `node tests/cockpit.test.js`, and `git diff --check` passed.
 - `tests/cab-regen-844.png` shows lift-off regen in the updated cab. `tests/cockpit-844.png` shows the original cab.
-- Use the Vercel preview in the sound update pull request. Turn the device to landscape and tap **Start shift**. The stable play link is https://tesla-semi-sim.vercel.app.
+- Open the Vercel preview in [PR #4](https://github.com/benpham3206/tesla-semi-sim/pull/4). It requires Vercel sign-in. Turn the device to landscape and tap **Start shift**.
 - The old loopback preview and temporary Wi-Fi server were stopped after the hosted build passed. Do not use the old local test links.
 - Source changes, browser checks, screenshots, and reference images are retained. Temporary browser profiles were created and removed by the test. No pre-existing file was removed.

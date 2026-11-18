@@ -287,8 +287,7 @@ function bindPad(el, onMove, onEnd) {
   el.addEventListener('pointerdown', e => { if (id !== null) return; id = e.pointerId; el.setPointerCapture(id); onMove(e); e.preventDefault(); audio.unlock(); });
   el.addEventListener('pointermove', e => { if (e.pointerId === id) onMove(e); });
   const end = e => { if (e.pointerId === id) release(); };
-  el.addEventListener('pointerup', end);
-  el.addEventListener('pointerup', () => audio.unlock());
+  el.addEventListener('pointerup', e => { end(e); audio.unlock(); });
   el.addEventListener('pointercancel', end);
   el.addEventListener('lostpointercapture', end);
   releases.push(release);
@@ -320,10 +319,10 @@ addEventListener('keydown', e => {
   if (e.target instanceof HTMLButtonElement && (k === ' ' || k === 'enter')) return;
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
   if (e.repeat) return;
+  if (k === 'm') return audio.toggle();
   audio.unlock();
   if (k === 'r') toggleGear();
   else if (k === 'c') cycleCam();
-  else if (k === 'm') audio.toggle();
   else if (k === 'enter' && !running) startOrRestart();
   else keys.add(k);
 });

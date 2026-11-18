@@ -12,7 +12,7 @@ On a phone, hold it in landscape. Use Share → Add to Home Screen to launch it 
 
 New shifts start in the Cab view. The centered wheel follows steering. The left screen shows live instruments; the right shows the route. Reverse switches to the top-down docking view.
 
-Sound starts when you tap **Start shift**. Tap **SND** or press **M** to mute. Lift off the accelerator to hear regenerative braking and see **REGEN** on the left screen. If sound does not return after you switch apps, tap **CAM** or a pedal.
+Sound starts when you tap **Start shift**. Use **SND** or **M** to turn it on or off. Lift off the accelerator while moving to hear regenerative braking. In Cab view, the left screen shows **REGEN**. Sound goes quiet in portrait or when you switch apps. If sound is on but does not return, tap **CAM** or a pedal.
 
 ## Host on Vercel
 
