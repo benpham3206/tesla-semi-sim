@@ -35,6 +35,7 @@
   .battery i { position: absolute; inset: 1px; right: auto; background: var(--ok); border-radius: 1px; }
   .tools { display: flex; flex-direction: column; gap: 6px; pointer-events: auto; }
   .tools button { background: var(--panel); width: 44px; height: 44px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .tools #snd[aria-pressed="false"] { text-decoration: line-through; }
 
   .controls { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end;
     padding: 0 max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); pointer-events: none; }
@@ -83,16 +84,26 @@
     --gut: calc(max(12px, env(safe-area-inset-bottom)) + clamp(92px, 18vh, 168px));
     --wheelS: clamp(170px, 44vh, 340px); }
   body[data-view="cab"] #cockpit { display: block; }
-  #cockpit .roof { position: absolute; inset-inline: 0; top: 0; height: clamp(4px, 1.4vh, 10px); background: oklch(0.15 0.01 260); }
-  #cockpit .pillar { position: absolute; top: 0; bottom: 0; width: clamp(16px, 3.2vw, 38px); background: oklch(0.15 0.01 260); }
-  #cockpit .pillar.left { left: 0; clip-path: polygon(0 0, 100% 0, 55% 100%, 0 100%); border-inline-end: 1px solid rgba(255, 255, 255, .06); }
-  #cockpit .pillar.right { right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 45% 100%); border-inline-start: 1px solid rgba(255, 255, 255, .06); }
-  #cockpit .dash { position: absolute; left: -15%; right: -15%; bottom: -25%; height: 52%; border-radius: 50% 50% 0 0;
-    background: radial-gradient(120% 150% at 50% 0%, oklch(0.30 0.02 255), oklch(0.20 0.015 260) 55%, oklch(0.15 0.01 260));
-    box-shadow: inset 0 2px 0 rgba(255, 255, 255, .05), 0 -10px 40px rgba(0, 0, 0, .35); }
+  #cockpit .roof { position: absolute; inset-inline: 0; inset-block-start: 0; block-size: clamp(26px, 7.5vh, 72px);
+    border-radius: 0 0 38% 38% / 0 0 34% 34%; background: linear-gradient(174deg, oklch(0.58 0.018 84), oklch(0.72 0.014 84) 60%, oklch(0.49 0.016 248));
+    box-shadow: 0 2px 0 oklch(0.28 0.018 247); }
+  #cockpit .roof::after { content: ''; position: absolute; inset-block-start: 94%; inset-inline: 0; margin-inline: auto;
+    inline-size: clamp(38px, 6vw, 80px); block-size: 76%; border-radius: 2px 2px 8px 8px;
+    background: linear-gradient(oklch(0.35 0.016 248), oklch(0.22 0.014 248)); }
+  #cockpit .pillar { position: absolute; inset-block: 0 17%; inline-size: clamp(34px, 7.5vw, 104px);
+    clip-path: polygon(58% 0, 100% 0, 35% 100%, 0 100%, 0 87%);
+    background: linear-gradient(105deg, oklch(0.40 0.017 248) 28%, oklch(0.63 0.015 84) 61%, oklch(0.28 0.015 248) 68%); }
+  #cockpit .pillar.left { left: 0; }
+  #cockpit .pillar.right { right: 0; transform: scaleX(-1); }
+  #cockpit .dash { position: absolute; inset-inline: -8%; inset-block-end: -6%; block-size: 35%;
+    border-radius: 38% 38% 0 0 / 16% 16% 0 0;
+    background: linear-gradient(oklch(0.31 0.018 251), oklch(0.19 0.015 252) 32%, oklch(0.15 0.01 252));
+    box-shadow: inset 0 2px 0 oklch(0.51 0.018 250), 0 -6px 24px oklch(0.13 0.011 250 / .32); }
+  #cockpit .dash::before { content: ''; position: absolute; inset-inline: 0; inset-block-start: 12%; block-size: 13%;
+    background: repeating-linear-gradient(90deg, oklch(0.20 0.015 248) 0 2px, oklch(0.28 0.018 248) 2px 4px); }
   #cockpit .column { position: absolute; left: 50%; bottom: 0; width: calc(var(--wheelS) * .42); height: calc(var(--wheelS) * .2);
     margin-left: calc(var(--wheelS) * -.21); border-radius: 24px 24px 0 0; background: linear-gradient(oklch(0.22 0.015 260), oklch(0.14 0.01 260)); }
-  #cabWheel { position: absolute; left: 50%; bottom: calc(var(--wheelS) * -.36); width: var(--wheelS); aspect-ratio: 1;
+  #cabWheel { position: absolute; left: 50%; bottom: calc(var(--wheelS) * -.26); width: var(--wheelS); aspect-ratio: 1;
     margin-left: calc(var(--wheelS) / -2); filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .45)); will-change: transform; }
   #cabWheel svg { display: block; width: 100%; height: 100%; }
   .screens { position: absolute; inset-inline: 0; bottom: var(--gut); display: flex; justify-content: center; gap: calc(var(--wheelS) + 24px); }
@@ -108,6 +119,7 @@
   .cs-speed span { color: var(--dim); font-size: clamp(10px, 1.8vh, 13px); text-transform: uppercase; letter-spacing: .05em; }
   .cs-speed em { margin-inline-start: auto; font-style: normal; font-weight: 800; font-size: clamp(15px, 3.2vh, 24px); }
   .cs-speed em.r { color: var(--red); }
+  #regen { color: var(--ok); font-weight: 700; }
   .cs-row { display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: clamp(11px, 2.4vh, 16px); font-variant-numeric: tabular-nums; }
   .cs-row small { color: var(--dim); font-size: .8em; text-transform: uppercase; letter-spacing: .04em; }
   .cs-row .battery { width: 32px; height: 12px; }
@@ -125,6 +137,7 @@
   body[data-view="cab"] .knob { top: 2px; }
   body[data-view="cab"] :is(.pedal, #accel) { width: 60px; height: clamp(84px, 12vh, 120px); }
   body[data-view="cab"] #gear { width: 52px; height: 52px; font-size: 16px; }
+  body[data-view="cab"] .controls :where(.steer, .pedal, #gear) { box-shadow: inset 0 0 0 1px oklch(0.55 0.02 250); }
 
   button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
   button:active { transform: scale(.94); }
@@ -147,18 +160,17 @@
   <div class="dash" aria-hidden="true"></div>
   <div class="column" aria-hidden="true"></div>
   <div id="cabWheel" aria-hidden="true"><svg viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="43" fill="none" stroke="oklch(0.26 0.02 255)" stroke-width="9"/>
-    <circle cx="50" cy="50" r="43" fill="none" stroke="oklch(0.36 0.02 255)" stroke-width="1.2" transform="translate(-.6 -.8)"/>
-    <rect x="8" y="46" width="36" height="8" rx="4" fill="oklch(0.24 0.02 255)"/>
-    <rect x="56" y="46" width="36" height="8" rx="4" fill="oklch(0.24 0.02 255)"/>
-    <rect x="46" y="54" width="8" height="38" rx="4" fill="oklch(0.24 0.02 255)"/>
-    <circle cx="50" cy="50" r="17" fill="oklch(0.20 0.015 260)"/>
-    <ellipse cx="50" cy="44" rx="12" ry="6" fill="oklch(0.30 0.02 255)" opacity=".5"/>
-    <text x="50" y="52.5" text-anchor="middle" font-size="6.5" letter-spacing="1.5" fill="oklch(0.62 0.02 255)" font-family="inherit">TESLA</text>
+    <defs><linearGradient id="wheel-rim" x2=".7" y2="1"><stop stop-color="oklch(0.33 0.015 248)"/><stop offset="1" stop-color="oklch(0.17 0.012 248)"/></linearGradient></defs>
+    <path d="M11 42 39 45 61 45 89 42 89 54 65 58 58 64 56 89 44 89 42 64 35 58 11 54Z" fill="oklch(0.32 0.014 248)"/>
+    <path d="M44 64 56 64 53 87 47 87Z" fill="oklch(0.22 0.012 248)"/>
+    <circle cx="50" cy="50" r="43" fill="none" stroke="url(#wheel-rim)" stroke-width="9"/>
+    <path d="M37 40 Q50 37 63 40 Q67 41 66 47 L63 57 Q62 62 55 63 H45 Q38 62 37 57 L34 47 Q33 41 37 40Z" fill="oklch(0.25 0.012 248)" stroke="oklch(0.36 0.014 248)" stroke-width=".7"/>
+    <path d="M24 47h4m44 0h4" stroke="oklch(0.68 0.013 250)" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="50" y="52.5" text-anchor="middle" font-size="5" letter-spacing="1" fill="oklch(0.70 0.01 248)" font-family="inherit">TESLA</text>
   </svg></div>
   <div class="screens">
     <div class="cab-screen" id="cluster" role="group" aria-label="Driving instruments">
-      <div class="cs-speed"><b id="cspd">0</b><span>mph</span><em id="cgear">D</em></div>
+      <div class="cs-speed"><b id="cspd">0</b><span>mph</span><span id="regen" hidden>Regen</span><em id="cgear">D</em></div>
       <div class="cs-row"><span class="battery"><i id="cbatt"></i></span><b id="cbattPct">100%</b><b class="push" id="cpwr">0 kW</b></div>
       <div class="cs-row"><small>Avg</small><b id="ceff">–</b><small class="push">Cargo</small><b id="ccargo">–</b></div>
     </div>
@@ -187,7 +199,7 @@
   </div>
   <div class="tools">
     <button id="cam" aria-label="Change camera">CAM</button>
-    <button id="snd" aria-label="Toggle sound">SND</button>
+    <button id="snd" aria-label="SND: Cab sound" aria-pressed="true">SND</button>
   </div>
 </div>
 
@@ -208,7 +220,7 @@
     <p>Couple the trailer, take it up the 4% climb, and back it into the green dock bay. Manage speed, battery and cargo.</p>
     <div class="loads" id="loads"></div>
     <button class="primary" id="go">Start shift</button>
-    <div class="help">Touch: steer with the left pad. Brake and GO are pressure pedals, so press higher for more. D/R changes gear when you're stopped. CAM cycles Chase, Cab and Top; reverse always uses the top-down docking view.<br>
+    <div class="help">Touch: steer with the left pad. Brake and GO are pressure pedals, so press higher for more. D/R changes gear when you're stopped. CAM cycles Chase, Cab and Top; reverse always uses the top-down docking view. Sound starts with the shift. Tap SND to mute.<br>
       Keyboard: arrows or WASD, R for gear, C for camera, M for sound.<span class="tip"><br>On a phone, use Share → Add to Home Screen to play fullscreen.</span></div>
   </div>
 </div>
@@ -240,6 +252,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 let load = 'full', s = null, prev = null, running = false, camMode = 1, waypoint = 0, goal = [0, 0];
 const CAMS = ['Chase', 'Cab', 'Top'];
 const portrait = matchMedia('(orientation: portrait)');
+const fullMotion = matchMedia('(prefers-reduced-motion: no-preference)');
 const best = k => { try { return +localStorage['semi-best-' + k] || 0; } catch { return 0; } };
 const route = WORLD.roads[0].pts.slice(1).concat([WORLD.gate, [WORLD.dock.x, WORLD.dock.y + 25]]);
 const snap = st => ({ x: st.x, y: st.y, th: st.th, psi: st.psi, kx: st.kx, ky: st.ky, kpsi: st.kpsi, coupled: st.coupled });
@@ -275,6 +288,7 @@ function bindPad(el, onMove, onEnd) {
   el.addEventListener('pointermove', e => { if (e.pointerId === id) onMove(e); });
   const end = e => { if (e.pointerId === id) release(); };
   el.addEventListener('pointerup', end);
+  el.addEventListener('pointerup', () => audio.unlock());
   el.addEventListener('pointercancel', end);
   el.addEventListener('lostpointercapture', end);
   releases.push(release);
@@ -297,7 +311,7 @@ for (const name of ['accel', 'brake']) {
   }, () => { touch[key] = 0; });
 }
 $('gear').addEventListener('click', () => { audio.unlock(); toggleGear(); });
-$('cam').addEventListener('click', cycleCam);
+$('cam').addEventListener('click', () => { audio.unlock(); cycleCam(); });
 $('snd').addEventListener('click', () => audio.toggle());
 document.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -315,7 +329,7 @@ addEventListener('keydown', e => {
 });
 addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
 addEventListener('blur', resetInput);
-portrait.addEventListener('change', resetInput);
+portrait.addEventListener('change', () => { resetInput(); if (portrait.matches) audio.quiet(); else audio.resume(); });
 
 let keySteer = 0;
 function readInput(dt) {
@@ -337,6 +351,7 @@ function toggleGear() {
   const r = s.gear < 0;
   $('gear').textContent = $('gearLabel').textContent = r ? 'R' : 'D';
   $('gear').classList.toggle('r', r); $('gearLabel').classList.toggle('r', r);
+  audio.cue('shift');
 }
 function cycleCam() { camMode = (camMode + 1) % CAMS.length; toast(s.gear < 0 ? 'Reverse uses the top camera' : CAMS[camMode] + ' camera', 900); }
 
@@ -346,35 +361,134 @@ function toast(msg, ms = 2200) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), ms);
 }
 
-// ---------- Audio: motor whine, tire noise, reverse beeper ----------
+// ---------- Audio: original synthesis, using the live drive state ----------
+const CAB_CUES = {
+  shift: { length: 0.07, from: 980, to: 360, level: 0.18 },
+  coupled: { length: 0.24, from: 920, to: 175, level: 0.52 },
+  impact: { length: 0.24, from: 530, to: 130, level: 0.48 },
+  air: { length: 0.21, from: 2050, to: 710, level: 0.24 },
+};
 const audio = {
-  ctx: null, on: true,
+  ctx: null, on: true, audible: false, nextMix: 0, reverseSince: null, nextImpact: 0, brakeHeld: false,
+  get canPlay() { return this.on && running && !portrait.matches && !document.hidden; },
   unlock() {
-    if (this.ctx || !window.AudioContext && !window.webkitAudioContext) return;
-    const A = window.AudioContext || window.webkitAudioContext, c = this.ctx = new A();
-    this.motor = c.createOscillator(); this.motor.type = 'sawtooth';
-    this.filter = c.createBiquadFilter(); this.filter.type = 'lowpass'; this.filter.frequency.value = 900;
-    this.mg = c.createGain(); this.mg.gain.value = 0;
-    this.motor.connect(this.filter).connect(this.mg).connect(c.destination); this.motor.start();
-    this.beep = c.createOscillator(); this.beep.frequency.value = 1150;
-    this.bg = c.createGain(); this.bg.gain.value = 0;
-    this.beep.connect(this.bg).connect(c.destination); this.beep.start();
-    const noise = c.createBufferSource(), buf = c.createBuffer(1, c.sampleRate, c.sampleRate), d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 500;
-    this.tg = c.createGain(); this.tg.gain.value = 0;
-    noise.buffer = buf; noise.loop = true; noise.connect(lp).connect(this.tg).connect(c.destination); noise.start();
+    if (!this.canPlay) return;
+    if (!this.ctx || this.ctx.state === 'closed') {
+      this.quiet();
+      this.nextImpact = 0;
+      try {
+        const Context = window.AudioContext || window.webkitAudioContext;
+        if (!Context) return this.unavailable();
+        const c = this.ctx = new Context();
+        this.master = c.createGain(); this.master.gain.value = 0;
+        // ponytail: one mono cabin filter; tune separate source curves if measured recordings become available.
+        this.cabFilter = c.createBiquadFilter(); this.cabFilter.frequency.value = 2200; this.cabFilter.Q.value = 0;
+        this.cabFilter.connect(this.master).connect(c.destination);
+        const voice = (source, type, hz) => {
+          const filter = c.createBiquadFilter(), amp = c.createGain();
+          filter.type = type; filter.frequency.value = hz; filter.Q.value = 0.7;
+          amp.gain.value = 0;
+          source.connect(filter).connect(amp).connect(this.cabFilter);
+          return { filter, level: amp.gain };
+        };
+        const oscillator = (type, hz) => {
+          const source = c.createOscillator(); source.type = type; source.frequency.value = hz;
+          source.start();
+          return source;
+        };
+        this.fundamental = oscillator('sine', 88);
+        this.harmonic = oscillator('triangle', 176);
+        this.motor = voice(this.fundamental, 'lowpass', 1100);
+        this.whine = voice(this.harmonic, 'lowpass', 1500);
+        this.reverse = voice(oscillator('triangle', 825), 'lowpass', 1800);
+        this.noise = c.createBuffer(1, c.sampleRate * 2, c.sampleRate);
+        const samples = this.noise.getChannelData(0);
+        for (let i = 0; i < samples.length; i++) samples[i] = 2 * Math.random() - 1;
+        const bed = c.createBufferSource(); bed.buffer = this.noise; bed.loop = true;
+        this.road = voice(bed, 'bandpass', 340);
+        this.air = voice(bed, 'bandpass', 1350);
+        bed.start();
+        c.onstatechange = () => { if (this.ctx === c && c.state !== 'running') this.quiet(); };
+      } catch { return this.unavailable(); }
+    }
+    this.resume();
   },
-  toggle() { this.on = !this.on; $('snd').style.opacity = this.on ? 1 : .45; toast(this.on ? 'Sound on' : 'Sound off', 900); },
-  update(t) {
-    if (!this.ctx) return;
-    const sp = Math.abs(s.v), load = Math.min(1, Math.abs(s.power) / PARAMS.peakPower);
-    const gain = this.on && running ? 0.015 + 0.05 * load + 0.01 * Math.min(1, sp / 20) : 0;
-    this.motor.frequency.setTargetAtTime(60 + sp * 28, this.ctx.currentTime, 0.05);
-    this.mg.gain.setTargetAtTime(gain, this.ctx.currentTime, 0.08);
-    this.tg.gain.setTargetAtTime(this.on && running ? Math.min(0.12, sp / 250) : 0, this.ctx.currentTime, 0.1);
-    const beeping = this.on && running && s.gear < 0 && (t / 500 | 0) % 2 === 0;
-    this.bg.gain.setTargetAtTime(beeping ? 0.04 : 0, this.ctx.currentTime, 0.01);
+  resume() {
+    const c = this.ctx;
+    if (this.canPlay && (c?.state === 'suspended' || c?.state === 'interrupted')) c.resume().catch(() => {});
+  },
+  unavailable() {
+    if (this.ctx) this.ctx.close().catch(() => {});
+    this.ctx = null;
+    this.on = false;
+    const button = $('snd');
+    button.disabled = true; button.setAttribute('aria-pressed', 'false');
+    toast('Sound unavailable', 1200);
+  },
+  toggle() {
+    const button = $('snd');
+    if (button.disabled) return;
+    this.on = !this.on;
+    button.setAttribute('aria-pressed', String(this.on));
+    if (this.on) this.unlock(); else this.quiet();
+    if (!button.disabled) toast(this.on ? 'Sound on' : 'Sound off', 900);
+  },
+  quiet() {
+    this.brakeHeld = false;
+    this.reverseSince = null;
+    if (!this.audible) return;
+    this.audible = false;
+    const c = this.ctx;
+    if (c.state === 'running') this.master.gain.setTargetAtTime(0, c.currentTime, 0.014);
+    else if (c.state !== 'closed') this.master.gain.setValueAtTime(0, c.currentTime);
+  },
+  cue(kind) {
+    const c = this.ctx;
+    if (!this.audible || !this.canPlay || c?.state !== 'running') return;
+    const now = c.currentTime, { length, from, to, level } = CAB_CUES[kind];
+    if (kind === 'impact') {
+      if (now < this.nextImpact) return;
+      this.nextImpact = now + 0.26;
+    }
+    const source = c.createBufferSource(), tone = c.createBiquadFilter(), amp = c.createGain();
+    source.buffer = this.noise;
+    tone.type = 'bandpass'; tone.Q.value = 1.15; tone.frequency.setValueAtTime(from, now);
+    tone.frequency.exponentialRampToValueAtTime(to, now + length);
+    amp.gain.setValueAtTime(0, now);
+    amp.gain.linearRampToValueAtTime(level, now + 0.008);
+    amp.gain.exponentialRampToValueAtTime(0.001, now + length);
+    source.connect(tone).connect(amp).connect(this.cabFilter);
+    source.onended = () => { source.disconnect(); tone.disconnect(); amp.disconnect(); };
+    source.start(now, Math.random() * 1.5, length);
+  },
+  update(state, command, view) {
+    const c = this.ctx;
+    if (!this.canPlay || c?.state !== 'running') return this.quiet();
+    const now = c.currentTime;
+    if (!this.audible) {
+      this.audible = true; this.nextMix = now;
+      this.master.gain.setTargetAtTime(0.72, now, 0.035);
+    }
+    if (now < this.nextMix) return;
+    this.nextMix = now + 0.03;
+    const aim = (param, value, glide = 0.055) => param.setTargetAtTime(value, now, glide);
+    const speed = Math.abs(state.v), pace = clamp(speed / 27, 0, 1), moving = clamp(speed / 2, 0, 1);
+    const drive = Math.sqrt(clamp((state.power - PARAMS.auxPower) * PARAMS.efficiency / PARAMS.peakPower, 0, 1));
+    const regen = Math.sqrt(clamp(-state.power / PARAMS.regenPower, 0, 1));
+    const pitch = 88 + speed * 15;
+    aim(this.cabFilter.frequency, view === 'Cab' ? 2200 : 3600);
+    aim(this.fundamental.frequency, pitch);
+    aim(this.harmonic.frequency, pitch * (2 + 0.65 * regen));
+    aim(this.motor.level, moving * (0.006 + 0.068 * drive + 0.018 * regen));
+    aim(this.whine.level, moving * (0.018 * drive + 0.033 * regen));
+    aim(this.road.filter.frequency, 320 + 300 * pace);
+    aim(this.road.level, Math.pow(pace, 0.75) * (state.offRoad ? 0.63 : 0.31));
+    aim(this.air.level, 0.018 + 0.19 * pace * pace);
+    if (state.gear < 0) this.reverseSince ??= now; else this.reverseSince = null;
+    const pulse = this.reverseSince !== null && (now - this.reverseSince) % 0.95 < 0.22;
+    aim(this.reverse.level, pulse ? 0.036 : 0, 0.018);
+    if (this.brakeHeld && command.brake <= 0.15) this.cue('air');
+    this.brakeHeld = speed < 0.45 && command.brake > 0.25;
   },
 };
 
@@ -535,7 +649,6 @@ function render(v, dt) {
   const view = !running ? 'Orbit' : s.gear < 0 ? 'Top' : CAMS[camMode], cut = view !== lastView;
   if (cut) { document.body.dataset.view = view.toLowerCase(); $('cam').textContent = view === 'Top' && s.gear < 0 ? 'TOP' : CAMS[camMode].toUpperCase(); }
   tractor.visible = view !== 'Cab';
-  $('cabWheel').style.transform = `rotate(${(s.delta / P.maxSteer * 150).toFixed(1)}deg)`;
   const fx = Math.cos(v.th), fy = Math.sin(v.th), e = elev(v.x, v.y);
   lastView = view;
   if (view === 'Top') {   // looks straight down with the direction of travel up the screen
@@ -545,8 +658,14 @@ function render(v, dt) {
     const ux = Math.cos(topAng), uy = Math.sin(topAng), lx = cx + ux * 6, ly = cy + uy * 6;
     cam.up.set(ux, 0, uy); cam.position.set(lx, elev(cx, cy) + 48 + sp * 2, ly); cam.lookAt(lx, 0, ly);
   } else if (view === 'Cab') {
-    upAng = v.th; cam.up.set(0, 1, 0); cam.position.set(v.x + fx * 5.4, e + 2.9, v.y + fy * 5.4);
-    cam.lookAt(v.x + fx * 40, elev(v.x + fx * 40, v.y + fy * 40) + 1.5, v.y + fy * 40);
+    const wheelTravel = fullMotion.matches ? 900 : 150; // Degrees from center: roughly five turns lock to lock.
+    $('cabWheel').style.transform = `rotate(${(s.delta / P.maxSteer * wheelTravel).toFixed(1)}deg)`;
+    const pitch = fullMotion.matches ? clamp(body.rotation.z * 0.65, -0.016, 0.016) : 0;
+    const roll = fullMotion.matches ? clamp(body.rotation.x * 0.45, -0.012, 0.012) : 0;
+    upAng = v.th;
+    cam.up.set(-fy * roll, 1, fx * roll);
+    cam.position.set(v.x + fx * 4.9, e + 3.05, v.y + fy * 4.9);
+    cam.lookAt(v.x + fx * 40, elev(v.x + fx * 40, v.y + fy * 40) + 1.5 + 35 * pitch, v.y + fy * 40);
   } else {
     orbit = running ? 0 : orbit + dt * 0.15;
     camYaw = cut && running ? v.th : camYaw + wrap(v.th - camYaw) * k / 2;
@@ -594,6 +713,7 @@ function hud() {
   $('cbatt').style.width = `calc(${pct}% - 2px)`;
   $('cpwr').textContent = $('pwr').textContent;
   $('cpwr').style.color = kw < 0 ? 'var(--ok)' : '';
+  $('regen').hidden = kw >= -1;
   $('ceff').textContent = $('eff').textContent;
   $('ccargo').textContent = $('cargo').textContent;
   $('cgear').textContent = s.gear < 0 ? 'R' : 'D';
@@ -606,10 +726,10 @@ function hud() {
 
 function handleEvents() {
   for (const e of s.events.splice(0)) {
-    if (e === 'coupled') { toast('Trailer coupled. Shift to D and follow the arrow.'); navigator.vibrate?.(40); }
+    if (e === 'coupled') { toast('Trailer coupled. Shift to D and follow the arrow.'); navigator.vibrate?.(40); audio.cue('coupled'); }
     else if (e === 'yard') toast('In the yard. Back into the green bay.');
-    else if (e === 'collision') { toast('Collision!', 1200); navigator.vibrate?.(150); }
-    else if (e === 'jackknife') { toast('Jackknife! Straighten the steering.', 1600); navigator.vibrate?.(150); }
+    else if (e === 'collision') { toast('Collision!', 1200); navigator.vibrate?.(150); audio.cue('impact'); }
+    else if (e === 'jackknife') { toast('Jackknife! Straighten the steering.', 1600); navigator.vibrate?.(150); audio.cue('impact'); }
     else if (e === 'docked') finish();
   }
   if (s.batteryKWh <= 0 && running) { running = false; showEnd('Battery depleted'); }
@@ -644,8 +764,8 @@ drawLoads();
 function startOrRestart() {
   s = Sim.createState(load); prev = snap(s); waypoint = 0; camMode = 1; resetInput();
   $('gear').textContent = $('gearLabel').textContent = 'D'; $('gear').classList.remove('r'); $('gearLabel').classList.remove('r');
-  if (matchMedia('(pointer: coarse)').matches) document.documentElement.requestFullscreen?.()?.then(() => screen.orientation.lock?.('landscape')).catch(() => {});
   $('start').hidden = $('end').hidden = true; running = true; document.body.classList.add('playing'); audio.unlock();
+  if (matchMedia('(pointer: coarse)').matches) document.documentElement.requestFullscreen?.()?.then(() => screen.orientation.lock?.('landscape')).catch(() => {});
   toast('Shift to R and back under the trailer');
 }
 $('go').onclick = startOrRestart;
@@ -663,10 +783,14 @@ function frame(now) {
   }
   hud();
   render(lerpState(prev, snap(s), running ? acc / DT : 1), dt);
-  audio.update(now);
+  audio.update(s, input, lastView);
   requestAnimationFrame(frame);
 }
-document.addEventListener('visibilitychange', () => { last = performance.now(); acc = 0; if (document.hidden) resetInput(); });
+document.addEventListener('visibilitychange', () => {
+  last = performance.now(); acc = 0;
+  if (document.hidden) { resetInput(); audio.quiet(); }
+  else audio.resume();
+});
 resize();
 s = Sim.createState(load); prev = snap(s);
 requestAnimationFrame(frame);

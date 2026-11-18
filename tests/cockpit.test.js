@@ -76,16 +76,38 @@ async function main() {
       await writeFile(join(output, `${name}.png`), Buffer.from(data, 'base64'));
     }
     const key = (type, value) => call('Input.dispatchKeyEvent', { type, key: value, code: `Key${value.toUpperCase()}` });
+    async function tap(id) {
+      const point = await js(`(() => {
+        const r = document.getElementById(${JSON.stringify(id)}).getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      })()`);
+      await call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+      await call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    }
 
     await call('Runtime.enable');
     await call('Network.enable');
     await call('Page.enable');
     await size(844, 390);
+    await call('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
     const gameUrl = process.argv[2] || pathToFileURL(resolve(__dirname, '../index.html')).href;
     await call('Page.navigate', { url: gameUrl });
     await until("typeof s !== 'undefined' && s !== null && typeof renderer !== 'undefined'");
-    await js("document.getElementById('go').click()");
-    await until('running && lastView !== ""');
+    await key('keyDown', 'w');
+    await key('keyUp', 'w');
+    assert(await js('audio.ctx === null'), 'Sound must not initialize before Start shift.');
+    await tap('go');
+    await until("running && lastView === 'Cab' && audio.ctx?.state === 'running'");
+    // Observe the native stream after the mute gain, independent of Chrome's muted output.
+    await js(`window.audioRms = (() => {
+      const meter = audio.ctx.createAnalyser(), samples = new Float32Array(meter.fftSize);
+      audio.master.connect(meter);
+      return () => {
+        meter.getFloatTimeDomainData(samples);
+        return Math.sqrt(samples.reduce((sum, x) => sum + x * x, 0) / samples.length);
+      };
+    })()`);
+    await until('audioRms() > .0005');
     await shot('cockpit-844');
     assert.equal(await js('lastView'), 'Cab', 'A new shift must start in the inside POV.');
     assert.equal(await js("document.querySelectorAll('#cockpit .cab-screen').length"), 2, 'Cab has two screens.');
@@ -98,11 +120,32 @@ async function main() {
       'The wheel must respond to steering.');
     await key('keyUp', 'd');
     await key('keyDown', 'w');
-    await until('s.v > 0.15');
+    await until('s.v > 4 && s.power > 0');
     await key('keyUp', 'w');
+    await until("s.power < -1000 && !$('regen').hidden");
+    await shot('regen-844');
     await key('keyDown', 's');
     await until('Math.abs(s.v) < 0.05');
     await key('keyUp', 's');
+
+    await key('keyDown', 'm');
+    await key('keyUp', 'm');
+    await until(`$('snd').getAttribute('aria-pressed') === 'false' && audioRms() < .00005`);
+    await tap('snd');
+    await until(`$('snd').getAttribute('aria-pressed') === 'true' && audioRms() > .0005`);
+    await js(`Object.defineProperty(document, 'hidden', { value: true, configurable: true });
+      document.dispatchEvent(new Event('visibilitychange'));`);
+    await until('!audio.audible && audioRms() < .00005');
+    await js('audio.ctx.suspend()');
+    await js(`delete document.hidden; document.dispatchEvent(new Event('visibilitychange'));`);
+    await until("audio.ctx.state === 'running' && audioRms() > .0005");
+    await js('audio.ctx.close()');
+    await tap('cam');
+    await until("audio.ctx.state === 'running' && audio.audible && lastView === 'Top'");
+    await tap('cam');
+    await tap('cam');
+    await until("lastView === 'Cab'");
+
     await js("document.getElementById('gear').click()");
     await until("s.gear < 0 && lastView === 'Top'");
     assert.equal(await js("getComputedStyle(document.getElementById('cockpit')).display"), 'none',
@@ -120,7 +163,6 @@ async function main() {
     await key('keyUp', 'w');
     await js('document.activeElement.blur()');
 
-    await call('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
     const pads = await js(`['steer', 'accel'].map((id, i) => {
       const r = document.getElementById(id).getBoundingClientRect();
       return {id: i + 1, x: r.left + r.width * (i ? .5 : .72), y: r.top + r.height * .3};
@@ -178,12 +220,13 @@ async function main() {
     await delay(200);
     assert.equal(await js('s.time'), time, 'The mission pauses in portrait.');
     assert.equal(await js('input.throttle'), 0, 'Rotation must release a held accelerator.');
+    assert(await js('!audio.audible'), 'Rotation must silence the cab.');
     await call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     await shot('portrait');
     assert.deepEqual(errors, [], 'The browser must not throw.');
     assert(!network.some(url => /^https?:/.test(url) && new URL(url).origin !== new URL(gameUrl).origin),
       'The game must not load external resources.');
-    console.log('PASS: inside POV, two screens, driving, reverse, camera cycle, two-thumb input, phone/tablet layouts, portrait pause/input release, no external assets.');
+    console.log('PASS: inside POV, lift-off regen, sound activation/mute/recovery, driving, reverse, two-thumb input, phone/tablet layouts, portrait pause/input release, no external assets.');
     console.log(`Screenshots: ${output}`);
   } finally {
     socket?.close();

@@ -12,6 +12,8 @@ On a phone, hold it in landscape. Use Share → Add to Home Screen to launch it 
 
 New shifts start in the Cab view. The centered wheel follows steering. The left screen shows live instruments; the right shows the route. Reverse switches to the top-down docking view.
 
+Sound starts when you tap **Start shift**. Tap **SND** or press **M** to mute. Lift off the accelerator to hear regenerative braking and see **REGEN** on the left screen. If sound does not return after you switch apps, tap **CAM** or a pedal.
+
 ## Host on Vercel
 
 The Vercel project is `tesla-semi-sim`. `vercel.json` runs `scripts/project/build` and serves `dist/`. The build copies only the game assets, so project instructions and tests are not public web files. No package install or framework is required. Run `make build` to check the package locally.
@@ -32,6 +34,6 @@ The Vercel project is `tesla-semi-sim`. `vercel.json` runs `scripts/project/buil
 
 Run `make verify && make test`.
 
-For the cockpit and touch checks, run `node tests/cockpit.test.js` with Node 22 or newer and Chrome installed. Set `CHROME_BIN` if Chrome is in a custom location. Pass a site URL as the first argument to check a hosted build instead. The check opens an isolated headless browser and saves screenshots in a temporary folder. It checks phone and tablet layouts, not real-device frame rate or touch feel.
+For the cockpit, touch, and sound checks, run `node tests/cockpit.test.js` with Node 22 or newer and Chrome installed. Set `CHROME_BIN` if Chrome is in a custom location. Pass a site URL as the first argument to check a hosted build instead. The check opens an isolated headless browser and saves screenshots in a temporary folder. It checks phone and tablet layouts and the browser audio signal. It does not check speakers, frame rate, or touch feel on real devices.
 
 Read `GOAL.md`, `ARCHITECTURE.md`, `STATUS.md`, and `AGENTS.md` for project context and working rules.
