@@ -16,7 +16,7 @@ Each `sim.js` step applies the longitudinal force model `m a = F_drive − F_bra
 - `vendor/three.min.js` is Three.js 0.160.1, which still ships a classic-script build. It keeps the game free of a build step and a CDN.
 - `manifest.webmanifest` and `icon.png` make the game installable to a phone home screen.
 - `tests/sim.test.js` uses Node assert for calibration and behavior contracts.
-- `tests/cockpit.test.js` checks local or hosted driving and touch behavior in an isolated Chrome process. `vercel.json` runs `scripts/project/build` to package only the five game assets in `dist/`.
+- `tests/cockpit.test.js` checks local or hosted driving, touch, and audio behavior in an isolated Chrome process. `vercel.json` runs `scripts/project/build` to package only the five game assets in `dist/`.
 
 ## Invariant
 
